@@ -124,4 +124,48 @@ body.dark {
 .project-content { padding: 1rem 1.2rem; }
 
 .project-content h3 a {
-  color: var(--acc
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.project-content p {
+  margin: 0.5rem 0;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.project-summary {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin-bottom: 0.5rem;
+}
+
+.links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.links a {
+  text-decoration: none;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.badge {
+  display: inline-block;
+  background: #e9f3ff;
+  color: var(--accent);
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-top: 0.5rem;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.9rem;
+  color: var(--text);
+}
