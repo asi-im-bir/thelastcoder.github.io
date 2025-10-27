@@ -1,77 +1,176 @@
 const username = "asi-im-bir";
 
-const customSummaries = {
-  "portfolio-site": "A fully responsive portfolio showcasing my development projects, built with pure HTML, CSS, and JS.",
-  "weather-app": "A modern weather dashboard using the OpenWeather API, displaying real-time forecasts with clean visuals.",
-  "todo-api": "A Node.js API that manages daily tasks with JWT authentication, built with Express and MongoDB.",
-  "chat-app": "A real-time chat platform using Socket.io, Node.js, and WebSocket events.",
-  "machine-learning-demo": "A Python-based machine learning demo featuring predictive modeling and data visualization.",
+const projectData = {
+  "portfolio-site": {
+    summary: "Personal portfolio dynamically showcasing GitHub projects with animations, filters, and dark mode.",
+    category: "Frontend",
+    live: "https://thelastcoder.github.io",
+    tech: ["HTML", "CSS", "JavaScript", "AOS.js"],
+    images: ["images/portfolio-site-1.png"]
+  },
+  "weather-app": {
+    summary: "A weather app using OpenWeather API and geolocation.",
+    category: "Frontend",
+    live: "https://asi-im-bir.github.io/weather-app",
+    tech: ["JavaScript", "HTML", "CSS", "OpenWeather API"],
+    images: ["images/weather-app-1.png"]
+  }
 };
 
+// Fetch repos
 let allRepos = [];
-
 async function loadProjects() {
-  const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
-  allRepos = await response.json();
+  const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
+  allRepos = await res.json();
   renderProjects("All");
 }
 
-function renderProjects(language) {
+// Fetch README text
+async function fetchReadme(username, repoName) {
+  try {
+    const res = await fetch(`https://raw.githubusercontent.com/${username}/${repoName}/main/README.md`);
+    if (!res.ok) {
+      const alt = await fetch(`https://raw.githubusercontent.com/${username}/${repoName}/master/README.md`);
+      if (!alt.ok) return "No README found.";
+      return await alt.text();
+    }
+    return await res.text();
+  } catch {
+    return "No README available.";
+  }
+}
+
+// Render projects
+function renderProjects(filter) {
   const container = document.getElementById("projects");
   container.innerHTML = "";
 
-  const filtered = allRepos.filter(repo => {
-    if (repo.fork || repo.private) return false;
-    if (language === "All") return true;
-    return repo.language && repo.language.toLowerCase() === language.toLowerCase();
+  const filtered = allRepos.filter(r => {
+    if (r.fork || r.private) return false;
+    const data = projectData[r.name];
+    if (filter === "All") return true;
+    return (
+      (r.language && r.language.toLowerCase() === filter.toLowerCase()) ||
+      (data && data.category && data.category.toLowerCase() === filter.toLowerCase())
+    );
   });
 
-  filtered.slice(0, 12).forEach((repo, index) => {
+  filtered.forEach(repo => {
+    const data = projectData[repo.name] || {};
+    const image = (data.images && data.images[0]) || `images/${repo.name}.png`;
+    const summary = data.summary || repo.description || "Open-source project";
+    const category = data.category || repo.language || "General";
+
     const card = document.createElement("div");
     card.className = "project-card";
-    card.setAttribute("data-aos", index % 2 === 0 ? "fade-up" : "zoom-in");
-
-    const imagePath = `images/${repo.name}.png`;
-    const homepage = repo.homepage ? `<a href="${repo.homepage}" target="_blank">🌐 Live Demo</a>` : "";
-    const summary = customSummaries[repo.name] || repo.description || "An open-source project exploring new ideas.";
+    card.setAttribute("data-aos", "fade-up");
 
     card.innerHTML = `
-      <img src="${imagePath}" alt="${repo.name}" class="project-img" onerror="this.style.display='none'">
+      <img src="${image}" alt="${repo.name}" class="project-img" onerror="this.style.display='none'">
       <div class="project-content">
-        <h3><a href="${repo.html_url}" target="_blank">${repo.name}</a></h3>
+        <h3>${repo.name}</h3>
         <p class="project-summary">${summary}</p>
-        <div class="links">
-          <a href="${repo.html_url}" target="_blank">🔗 GitHub</a>
-          ${homepage}
+        <div class="buttons">
+          <button class="btn view-btn" 
+            data-name="${repo.name}" 
+            data-summary="${summary}" 
+            data-image="${image}" 
+            data-live="${data.live || ''}" 
+            data-github="${repo.html_url}">
+            👁 View Project
+          </button>
         </div>
-        <div class="badge">${repo.language || "N/A"}</div>
+        <div class="badge">${category}</div>
       </div>
     `;
     container.appendChild(card);
   });
 
-  // Refresh AOS when content updates
   if (window.AOS) AOS.refresh();
 }
 
-// 🔄 Language Filter
+// Filter buttons
 document.addEventListener("click", e => {
   if (e.target.classList.contains("filter-btn")) {
-    document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
     e.target.classList.add("active");
     renderProjects(e.target.dataset.language);
   }
 });
 
-// 🌙 Dark Mode Toggle
-const darkModeToggle = document.getElementById("darkModeToggle");
-const currentTheme = localStorage.getItem("theme");
-if (currentTheme === "dark") document.body.classList.add("dark");
-
-darkModeToggle.addEventListener("click", () => {
+// Dark mode toggle
+const toggle = document.getElementById("darkModeToggle");
+const theme = localStorage.getItem("theme");
+if (theme === "dark") document.body.classList.add("dark");
+toggle.addEventListener("click", () => {
   document.body.classList.toggle("dark");
-  const theme = document.body.classList.contains("dark") ? "dark" : "light";
-  localStorage.setItem("theme", theme);
+  localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
 });
 
+// === Modal Logic ===
+const modal = document.getElementById("projectModal");
+const modalImg = document.getElementById("modalImage");
+const modalTitle = document.getElementById("modalTitle");
+const modalSummary = document.getElementById("modalSummary");
+const modalTech = document.getElementById("modalTech");
+const modalLinks = document.getElementById("modalLinks");
+const closeBtn = document.querySelector(".close-btn");
+const prevBtn = document.getElementById("prevImg");
+const nextBtn = document.getElementById("nextImg");
+
+let currentImages = [], currentIndex = 0;
+
+// Open modal
+document.addEventListener("click", e => {
+  if (e.target.classList.contains("view-btn")) {
+    const { name, summary, image, live, github } = e.target.dataset;
+    const project = projectData[name] || {};
+
+    modalTitle.textContent = name;
+    modalSummary.textContent = "Loading project summary...";
+    modalTech.innerHTML = project.tech ? project.tech.map(t => `<li>${t}</li>`).join("") : "";
+
+    currentImages = project.images || [image];
+    currentIndex = 0;
+    modalImg.src = currentImages[currentIndex];
+
+    modalLinks.innerHTML = `
+      ${project.live ? `<a href="${project.live}" target="_blank" class="btn">🌐 Live Demo</a>` : ""}
+      <a href="${github}" target="_blank" class="btn-outline">💻 GitHub</a>
+    `;
+    modal.style.display = "flex";
+
+    fetchReadme(username, name).then(readme => {
+      const clean = readme.split("\n").filter(l => l.trim()).slice(0, 3).join(" ").replace(/[#>*`]/g, "");
+      modalSummary.textContent = clean || summary;
+
+      const techMatch = readme.match(/(Tech\s*Stack|Built\s*With)[\s\S]*?(?=\n#+|\n\n|$)/i);
+      if (techMatch) {
+        const lines = techMatch[0].split("\n")
+          .filter(l => l && !/tech|built/i.test(l))
+          .map(l => l.replace(/[-*•]/g, "").trim())
+          .filter(Boolean);
+        if (lines.length) modalTech.innerHTML = lines.map(t => `<li>${t}</li>`).join("");
+      }
+    });
+  }
+});
+
+// Carousel navigation
+nextBtn.addEventListener("click", () => {
+  if (!currentImages.length) return;
+  currentIndex = (currentIndex + 1) % currentImages.length;
+  modalImg.src = currentImages[currentIndex];
+});
+prevBtn.addEventListener("click", () => {
+  if (!currentImages.length) return;
+  currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+  modalImg.src = currentImages[currentIndex];
+});
+
+closeBtn.addEventListener("click", () => modal.style.display = "none");
+window.addEventListener("click", e => { if (e.target === modal) modal.style.display = "none"; });
+document.addEventListener("keydown", e => { if (e.key === "Escape") modal.style.display = "none"; });
+
 loadProjects();
+

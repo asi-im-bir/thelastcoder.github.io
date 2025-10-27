@@ -45,10 +45,11 @@
       <!-- Filter Buttons -->
       <div class="filter-bar" data-aos="zoom-in">
         <button class="filter-btn active" data-language="All">All</button>
+        <button class="filter-btn" data-language="Frontend">Frontend</button>
+        <button class="filter-btn" data-language="Backend">Backend</button>
+        <button class="filter-btn" data-language="Machine Learning">Machine Learning</button>
         <button class="filter-btn" data-language="JavaScript">JavaScript</button>
         <button class="filter-btn" data-language="Python">Python</button>
-        <button class="filter-btn" data-language="HTML">HTML</button>
-        <button class="filter-btn" data-language="CSS">CSS</button>
       </div>
 
       <div id="projects" class="projects-grid"></div>
@@ -59,12 +60,27 @@
     <p>© 2025 Asi Imbir | Built with 💻 & ☕</p>
   </footer>
 
+  <!-- 🔍 Project Modal -->
+  <div id="projectModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <div class="carousel">
+        <button id="prevImg" class="nav-btn">⟨</button>
+        <img id="modalImage" src="" alt="" class="modal-img">
+        <button id="nextImg" class="nav-btn">⟩</button>
+      </div>
+      <h3 id="modalTitle"></h3>
+      <p id="modalSummary"></p>
+      <ul id="modalTech" class="tech-list"></ul>
+      <div id="modalLinks" class="modal-links"></div>
+    </div>
+  </div>
+
   <!-- AOS Library JS -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
   <script src="script.js"></script>
   <script>
-    // Initialize AOS after content loads
     AOS.init({ duration: 900, once: true });
   </script>
 </body>
