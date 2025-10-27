@@ -1,87 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Asi Imbir | Portfolio</title>
+<!-- 🔍 Full Project Modal -->
+<div id="projectModal" class="modal">
+  <div class="modal-content large">
+    <span class="close-btn">&times;</span>
 
-  <!-- AOS Animation Library -->
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <header class="hero" data-aos="fade-down">
-    <div class="hero-content">
-      <h1>👋 Hi, I'm <span class="highlight">Asi Imbir</span></h1>
-      <p class="subtitle">Full-Stack Developer | Open-Source Enthusiast | Lifelong Learner</p>
-      <div class="hero-links">
-        <a href="https://github.com/asi-im-bir" target="_blank">GitHub</a>
-        <a href="mailto:your.email@example.com">Contact</a>
-        <a href="resume.pdf" target="_blank">Resume</a>
-      </div>
-      <button id="darkModeToggle" class="toggle-btn">🌙 Dark Mode</button>
+    <div class="carousel" id="modalCarousel">
+      <button id="prevImg" class="nav-btn">⟨</button>
+      <img id="modalImage" src="" alt="" class="modal-img">
+      <button id="nextImg" class="nav-btn">⟩</button>
     </div>
-  </header>
 
-  <main>
-    <section class="about" data-aos="fade-up">
-      <h2>About Me</h2>
-      <p>
-        I'm a passionate software developer who loves crafting modern, 
-        efficient, and accessible web applications. My work combines 
-        creativity with problem-solving — turning ideas into interactive 
-        experiences.
-      </p>
-      <p>
-        I enjoy full-stack development, cloud integrations, and contributing 
-        to open-source projects. Here’s a look at some of my recent work.
-      </p>
-    </section>
+    <h2 id="modalTitle"></h2>
+    <ul id="modalTech" class="tech-list"></ul>
 
-    <section class="projects-section" data-aos="fade-up">
-      <h2>🚀 Featured Projects</h2>
+    <div id="readmeContent" class="readme-content">Loading...</div>
 
-      <!-- Filter Buttons -->
-      <div class="filter-bar" data-aos="zoom-in">
-        <button class="filter-btn active" data-language="All">All</button>
-        <button class="filter-btn" data-language="Frontend">Frontend</button>
-        <button class="filter-btn" data-language="Backend">Backend</button>
-        <button class="filter-btn" data-language="Machine Learning">Machine Learning</button>
-        <button class="filter-btn" data-language="JavaScript">JavaScript</button>
-        <button class="filter-btn" data-language="Python">Python</button>
-      </div>
-
-      <div id="projects" class="projects-grid"></div>
-    </section>
-  </main>
-
-  <footer data-aos="fade-up">
-    <p>© 2025 Asi Imbir | Built with 💻 & ☕</p>
-  </footer>
-
-  <!-- 🔍 Project Modal -->
-  <div id="projectModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn">&times;</span>
-      <div class="carousel">
-        <button id="prevImg" class="nav-btn">⟨</button>
-        <img id="modalImage" src="" alt="" class="modal-img">
-        <button id="nextImg" class="nav-btn">⟩</button>
-      </div>
-      <h3 id="modalTitle"></h3>
-      <p id="modalSummary"></p>
-      <ul id="modalTech" class="tech-list"></ul>
-      <div id="modalLinks" class="modal-links"></div>
-    </div>
+    <div id="modalLinks" class="modal-links"></div>
   </div>
+</div>
 
-  <!-- AOS Library JS -->
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
-  <script src="script.js"></script>
-  <script>
-    AOS.init({ duration: 900, once: true });
-  </script>
+<!-- Marked.js for Markdown rendering -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </body>
 </html>

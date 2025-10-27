@@ -111,25 +111,41 @@ toggle.addEventListener("click", () => {
 const modal = document.getElementById("projectModal");
 const modalImg = document.getElementById("modalImage");
 const modalTitle = document.getElementById("modalTitle");
-const modalSummary = document.getElementById("modalSummary");
 const modalTech = document.getElementById("modalTech");
 const modalLinks = document.getElementById("modalLinks");
 const closeBtn = document.querySelector(".close-btn");
 const prevBtn = document.getElementById("prevImg");
 const nextBtn = document.getElementById("nextImg");
+const readmeContent = document.getElementById("readmeContent");
 
 let currentImages = [], currentIndex = 0;
+
+// Fetch README
+async function fetchReadme(username, repoName) {
+  const urls = [
+    `https://raw.githubusercontent.com/${username}/${repoName}/main/README.md`,
+    `https://raw.githubusercontent.com/${username}/${repoName}/master/README.md`
+  ];
+
+  for (const url of urls) {
+    const res = await fetch(url);
+    if (res.ok) return await res.text();
+  }
+  return "No README found.";
+}
 
 // Open modal
 document.addEventListener("click", e => {
   if (e.target.classList.contains("view-btn")) {
-    const { name, summary, image, live, github } = e.target.dataset;
+    const { name, image, live, github } = e.target.dataset;
     const project = projectData[name] || {};
 
+    modal.style.display = "flex";
     modalTitle.textContent = name;
-    modalSummary.textContent = "Loading project summary...";
     modalTech.innerHTML = project.tech ? project.tech.map(t => `<li>${t}</li>`).join("") : "";
+    readmeContent.textContent = "Loading README...";
 
+    // Image carousel
     currentImages = project.images || [image];
     currentIndex = 0;
     modalImg.src = currentImages[currentIndex];
@@ -138,20 +154,11 @@ document.addEventListener("click", e => {
       ${project.live ? `<a href="${project.live}" target="_blank" class="btn">🌐 Live Demo</a>` : ""}
       <a href="${github}" target="_blank" class="btn-outline">💻 GitHub</a>
     `;
-    modal.style.display = "flex";
 
-    fetchReadme(username, name).then(readme => {
-      const clean = readme.split("\n").filter(l => l.trim()).slice(0, 3).join(" ").replace(/[#>*`]/g, "");
-      modalSummary.textContent = clean || summary;
-
-      const techMatch = readme.match(/(Tech\s*Stack|Built\s*With)[\s\S]*?(?=\n#+|\n\n|$)/i);
-      if (techMatch) {
-        const lines = techMatch[0].split("\n")
-          .filter(l => l && !/tech|built/i.test(l))
-          .map(l => l.replace(/[-*•]/g, "").trim())
-          .filter(Boolean);
-        if (lines.length) modalTech.innerHTML = lines.map(t => `<li>${t}</li>`).join("");
-      }
+    // Fetch README and render as HTML
+    fetchReadme(username, name).then(md => {
+      const html = marked.parse(md);
+      readmeContent.innerHTML = html;
     });
   }
 });
@@ -168,9 +175,7 @@ prevBtn.addEventListener("click", () => {
   modalImg.src = currentImages[currentIndex];
 });
 
+// Close modal
 closeBtn.addEventListener("click", () => modal.style.display = "none");
 window.addEventListener("click", e => { if (e.target === modal) modal.style.display = "none"; });
 document.addEventListener("keydown", e => { if (e.key === "Escape") modal.style.display = "none"; });
-
-loadProjects();
-
