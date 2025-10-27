@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  background: #f8f9fc;
+  color: #222;
+}
+
+.hero {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: linear-gradient(135deg, #0078ff, #00b7ff);
+  color: white;
+}
+
+.hero .highlight {
+  color: #ffea00;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+.links {
+  margin-top: 1rem;
+}
+
+.links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  margin: 0 10px;
+}
+
+.projects-section {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.projects-section h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.project-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+.project-card h3 a {
+  text-decoration: none;
+  color: #0078ff;
+  font-weight: 600;
+}
+
+.project-card p {
+  margin: 0.5rem 0;
+}
+
+.badge {
+  display: inline-block;
+  background: #e9f3ff;
+  color: #0078ff;
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-top: 0.5rem;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.9rem;
+  color: #555;
+}
