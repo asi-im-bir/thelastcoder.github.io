@@ -27,12 +27,12 @@ const featuredProjects = [
   }
 ];
 
-// 🧠 Load all projects
+// 🧠 Fetch public repos dynamically
 async function loadProjects() {
   const container = document.getElementById("project-list");
   container.innerHTML = "";
 
-  // Featured projects first
+  // Add featured projects
   featuredProjects.forEach(p => {
     const card = document.createElement("div");
     card.classList.add("project-card");
@@ -47,24 +47,25 @@ async function loadProjects() {
     container.appendChild(card);
   });
 
-  // GitHub repos (non-featured)
-  const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
-  const repos = await response.json();
+  // Load repos from GitHub
+  const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
+  const repos = await res.json();
 
   repos.forEach(repo => {
     const isFeatured = featuredProjects.some(f => f.name.toLowerCase() === repo.name.toLowerCase());
     if (repo.fork || isFeatured) return;
 
-    const card = document.createElement("div");
-    card.classList.add("project-card");
     const projectData = {
       name: repo.name,
-      desc: repo.description || "No description provided.",
+      desc: repo.description || "No description available.",
       tech: ["GitHub Repo"],
       img: "assets/images/default.png",
       link: repo.html_url,
       category: "Public Repo"
     };
+
+    const card = document.createElement("div");
+    card.classList.add("project-card");
     card.dataset.project = JSON.stringify(projectData);
     card.innerHTML = `
       <h3>${repo.name}</h3>
@@ -77,21 +78,42 @@ async function loadProjects() {
   setupModalEvents();
 }
 
-// Modal functionality
+// 🧩 Fetch and render README
+async function fetchReadme(projectName) {
+  const urls = [
+    `https://raw.githubusercontent.com/${username}/${projectName}/main/README.md`,
+    `https://raw.githubusercontent.com/${username}/${projectName}/master/README.md`
+  ];
+
+  for (const url of urls) {
+    const res = await fetch(url);
+    if (res.ok) return await res.text();
+  }
+  return "❌ No README found for this project.";
+}
+
+// 🧭 Modal functionality
 function setupModalEvents() {
   const modal = document.getElementById("project-modal");
   const closeBtn = document.getElementById("modal-close");
 
   document.querySelectorAll(".project-card").forEach(card => {
-    card.addEventListener("click", () => {
+    card.addEventListener("click", async () => {
       const project = JSON.parse(card.dataset.project);
+
       document.getElementById("modal-title").textContent = project.name;
       document.getElementById("modal-desc").textContent = project.desc;
       document.getElementById("modal-img").src = project.img;
-      document.getElementById("modal-tech").innerHTML = project.tech
-        .map(t => `<span class="tag">${t}</span>`)
-        .join("");
+      document.getElementById("modal-tech").innerHTML = project.tech.map(t => `<span class="tag">${t}</span>`).join("");
       document.getElementById("modal-link").href = project.link;
+
+      document.getElementById("modal-readme").innerHTML = "🕒 Loading README preview...";
+
+      const readme = await fetchReadme(project.name);
+      const html = marked.parse(readme);
+      document.getElementById("modal-readme").innerHTML = html;
+      hljs.highlightAll();
+
       modal.style.display = "flex";
     });
   });
@@ -102,7 +124,7 @@ function setupModalEvents() {
   });
 }
 
-// Filter buttons
+// 🔍 Filter
 document.querySelectorAll(".filter-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));

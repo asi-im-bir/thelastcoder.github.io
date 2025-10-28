@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Last Coder | GRC Engineer Portfolio</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
 </head>
 
 <body>
@@ -24,14 +27,15 @@
     <div id="project-list" class="projects-grid"></div>
   </main>
 
-  <!-- 🔍 Modal for project details -->
+  <!-- 🔍 Modal -->
   <div id="project-modal" class="modal">
     <div class="modal-content">
       <span id="modal-close">&times;</span>
-      <img id="modal-img" src="" alt="Project Preview" />
       <h2 id="modal-title"></h2>
-      <p id="modal-desc"></p>
+      <img id="modal-img" src="" alt="Project Preview" />
       <div id="modal-tech"></div>
+      <p id="modal-desc"></p>
+      <div id="modal-readme">🕒 Loading README preview...</div>
       <a id="modal-link" href="#" target="_blank" class="view-btn">🔗 View on GitHub</a>
     </div>
   </div>
