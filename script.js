@@ -1,23 +1,25 @@
 const username = "asi-im-bir";
 
+// Local data fallback
 const projectData = {
   "portfolio-site": {
-    summary: "Personal portfolio dynamically showcasing GitHub projects with animations, filters, and dark mode.",
+    summary: "Personal portfolio that fetches projects dynamically from GitHub.",
     category: "Frontend",
     live: "https://thelastcoder.github.io",
-    tech: ["HTML", "CSS", "JavaScript", "AOS.js"],
+    tech: ["HTML", "CSS", "JavaScript"],
     images: ["images/portfolio-site-1.png"]
-  },
-  "weather-app": {
-    summary: "A weather app using OpenWeather API and geolocation.",
-    category: "Frontend",
-    live: "https://asi-im-bir.github.io/weather-app",
-    tech: ["JavaScript", "HTML", "CSS", "OpenWeather API"],
-    images: ["images/weather-app-1.png"]
   }
 };
 
-// Fetch repos
+// Configure Markdown + syntax highlighting
+marked.setOptions({
+  highlight: function(code, lang) {
+    const validLang = hljs.getLanguage(lang) ? lang : 'plaintext';
+    return hljs.highlight(code, { language: validLang }).value;
+  },
+  langPrefix: 'hljs language-',
+});
+
 let allRepos = [];
 async function loadProjects() {
   const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
@@ -25,22 +27,6 @@ async function loadProjects() {
   renderProjects("All");
 }
 
-// Fetch README text
-async function fetchReadme(username, repoName) {
-  try {
-    const res = await fetch(`https://raw.githubusercontent.com/${username}/${repoName}/main/README.md`);
-    if (!res.ok) {
-      const alt = await fetch(`https://raw.githubusercontent.com/${username}/${repoName}/master/README.md`);
-      if (!alt.ok) return "No README found.";
-      return await alt.text();
-    }
-    return await res.text();
-  } catch {
-    return "No README available.";
-  }
-}
-
-// Render projects
 function renderProjects(filter) {
   const container = document.getElementById("projects");
   container.innerHTML = "";
@@ -57,32 +43,28 @@ function renderProjects(filter) {
 
   filtered.forEach(repo => {
     const data = projectData[repo.name] || {};
-    const image = (data.images && data.images[0]) || `images/${repo.name}.png`;
+    const img = (data.images && data.images[0]) || `images/${repo.name}.png`;
     const summary = data.summary || repo.description || "Open-source project";
     const category = data.category || repo.language || "General";
 
     const card = document.createElement("div");
     card.className = "project-card";
-    card.setAttribute("data-aos", "fade-up");
-
     card.innerHTML = `
-      <img src="${image}" alt="${repo.name}" class="project-img" onerror="this.style.display='none'">
+      <img src="${img}" alt="${repo.name}" class="project-img" onerror="this.style.display='none'">
       <div class="project-content">
         <h3>${repo.name}</h3>
         <p class="project-summary">${summary}</p>
         <div class="buttons">
-          <button class="btn view-btn" 
-            data-name="${repo.name}" 
-            data-summary="${summary}" 
-            data-image="${image}" 
-            data-live="${data.live || ''}" 
+          <button class="btn view-btn"
+            data-name="${repo.name}"
+            data-image="${img}"
+            data-live="${data.live || ''}"
             data-github="${repo.html_url}">
             👁 View Project
           </button>
         </div>
         <div class="badge">${category}</div>
-      </div>
-    `;
+      </div>`;
     container.appendChild(card);
   });
 
@@ -100,14 +82,26 @@ document.addEventListener("click", e => {
 
 // Dark mode toggle
 const toggle = document.getElementById("darkModeToggle");
-const theme = localStorage.getItem("theme");
-if (theme === "dark") document.body.classList.add("dark");
+if (localStorage.getItem("theme") === "dark") document.body.classList.add("dark");
 toggle.addEventListener("click", () => {
   document.body.classList.toggle("dark");
   localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
 });
 
-// === Modal Logic ===
+// Fetch README
+async function fetchReadme(repoName) {
+  const urls = [
+    `https://raw.githubusercontent.com/${username}/${repoName}/main/README.md`,
+    `https://raw.githubusercontent.com/${username}/${repoName}/master/README.md`
+  ];
+  for (const url of urls) {
+    const res = await fetch(url);
+    if (res.ok) return await res.text();
+  }
+  return "No README found.";
+}
+
+// Modal logic
 const modal = document.getElementById("projectModal");
 const modalImg = document.getElementById("modalImage");
 const modalTitle = document.getElementById("modalTitle");
@@ -117,24 +111,8 @@ const closeBtn = document.querySelector(".close-btn");
 const prevBtn = document.getElementById("prevImg");
 const nextBtn = document.getElementById("nextImg");
 const readmeContent = document.getElementById("readmeContent");
-
 let currentImages = [], currentIndex = 0;
 
-// Fetch README
-async function fetchReadme(username, repoName) {
-  const urls = [
-    `https://raw.githubusercontent.com/${username}/${repoName}/main/README.md`,
-    `https://raw.githubusercontent.com/${username}/${repoName}/master/README.md`
-  ];
-
-  for (const url of urls) {
-    const res = await fetch(url);
-    if (res.ok) return await res.text();
-  }
-  return "No README found.";
-}
-
-// Open modal
 document.addEventListener("click", e => {
   if (e.target.classList.contains("view-btn")) {
     const { name, image, live, github } = e.target.dataset;
@@ -145,7 +123,6 @@ document.addEventListener("click", e => {
     modalTech.innerHTML = project.tech ? project.tech.map(t => `<li>${t}</li>`).join("") : "";
     readmeContent.textContent = "Loading README...";
 
-    // Image carousel
     currentImages = project.images || [image];
     currentIndex = 0;
     modalImg.src = currentImages[currentIndex];
@@ -153,29 +130,26 @@ document.addEventListener("click", e => {
     modalLinks.innerHTML = `
       ${project.live ? `<a href="${project.live}" target="_blank" class="btn">🌐 Live Demo</a>` : ""}
       <a href="${github}" target="_blank" class="btn-outline">💻 GitHub</a>
+      <a href="project.html?repo=${name}" class="btn" target="_blank">📖 Full Case Study</a>
     `;
 
-    // Fetch README and render as HTML
-    fetchReadme(username, name).then(md => {
-      const html = marked.parse(md);
-      readmeContent.innerHTML = html;
+    fetchReadme(name).then(md => {
+      readmeContent.innerHTML = marked.parse(md);
     });
   }
 });
 
-// Carousel navigation
 nextBtn.addEventListener("click", () => {
-  if (!currentImages.length) return;
   currentIndex = (currentIndex + 1) % currentImages.length;
   modalImg.src = currentImages[currentIndex];
 });
 prevBtn.addEventListener("click", () => {
-  if (!currentImages.length) return;
   currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
   modalImg.src = currentImages[currentIndex];
 });
 
-// Close modal
 closeBtn.addEventListener("click", () => modal.style.display = "none");
 window.addEventListener("click", e => { if (e.target === modal) modal.style.display = "none"; });
 document.addEventListener("keydown", e => { if (e.key === "Escape") modal.style.display = "none"; });
+
+loadProjects();

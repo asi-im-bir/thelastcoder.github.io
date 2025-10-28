@@ -1,24 +1,67 @@
-<!-- 🔍 Full Project Modal -->
-<div id="projectModal" class="modal">
-  <div class="modal-content large">
-    <span class="close-btn">&times;</span>
+   <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asi Imbir | Portfolio</title>
 
-    <div class="carousel" id="modalCarousel">
-      <button id="prevImg" class="nav-btn">⟨</button>
-      <img id="modalImage" src="" alt="" class="modal-img">
-      <button id="nextImg" class="nav-btn">⟩</button>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header class="hero" data-aos="fade-down">
+    <div class="hero-content">
+      <h1>👋 Hi, I'm <span class="highlight">Asi Imbir</span></h1>
+      <p class="subtitle">Full-Stack Developer | Open Source Enthusiast</p>
+      <div class="hero-links">
+        <a href="https://github.com/asi-im-bir" target="_blank">GitHub</a>
+        <a href="mailto:youremail@example.com">Contact</a>
+      </div>
+      <button id="darkModeToggle" class="toggle-btn">🌙 Dark Mode</button>
     </div>
+  </header>
 
-    <h2 id="modalTitle"></h2>
-    <ul id="modalTech" class="tech-list"></ul>
+  <main>
+    <section class="projects-section" data-aos="fade-up">
+      <h2>🚀 My Projects</h2>
+      <div class="filter-bar">
+        <button class="filter-btn active" data-language="All">All</button>
+        <button class="filter-btn" data-language="Frontend">Frontend</button>
+        <button class="filter-btn" data-language="Backend">Backend</button>
+        <button class="filter-btn" data-language="Machine Learning">Machine Learning</button>
+      </div>
+      <div id="projects" class="projects-grid"></div>
+    </section>
+  </main>
 
-    <div id="readmeContent" class="readme-content">Loading...</div>
+  <footer>
+    <p>© 2025 Asi Imbir | Built with 💻 & ☕</p>
+  </footer>
 
-    <div id="modalLinks" class="modal-links"></div>
+  <!-- 🔍 Modal -->
+  <div id="projectModal" class="modal">
+    <div class="modal-content large">
+      <span class="close-btn">&times;</span>
+      <div class="carousel">
+        <button id="prevImg" class="nav-btn">⟨</button>
+        <img id="modalImage" src="" alt="" class="modal-img">
+        <button id="nextImg" class="nav-btn">⟩</button>
+      </div>
+      <h2 id="modalTitle"></h2>
+      <ul id="modalTech" class="tech-list"></ul>
+      <div id="readmeContent" class="readme-content">Loading...</div>
+      <div id="modalLinks" class="modal-links"></div>
+    </div>
   </div>
-</div>
 
-<!-- Marked.js for Markdown rendering -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- Libraries -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+  <script src="script.js"></script>
+  <script>AOS.init({ duration: 900, once: true });</script>
 </body>
 </html>

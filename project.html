@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study | Asi Imbir</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+<body>
+  <main>
+    <a href="index.html" class="back-btn">⬅ Back to Portfolio</a>
+    <h1 id="title">Loading...</h1>
+    <div id="readme">Fetching README...</div>
+  </main>
+
+  <script>
+    const username = "asi-im-bir";
+    marked.setOptions({
+      highlight: function(code, lang) {
+        const validLang = hljs.getLanguage(lang) ? lang : 'plaintext';
+        return hljs.highlight(code, { language: validLang }).value;
+      },
+      langPrefix: 'hljs language-',
+    });
+
+    const repo = new URLSearchParams(window.location.search).get("repo");
+    document.getElementById("title").textContent = repo || "Unknown Project";
+
+    async function fetchReadme() {
+      const urls = [
+        `https://raw.githubusercontent.com/${username}/${repo}/main/README.md`,
+        `https://raw.githubusercontent.com/${username}/${repo}/master/README.md`
+      ];
+      for (const url of urls) {
+        const res = await fetch(url);
+        if (res.ok) return await res.text();
+      }
+      return "❌ No README found for this project.";
+    }
+
+    fetchReadme().then(md => {
+      document.getElementById("readme").innerHTML = marked.parse(md);
+    });
+  </script>
+</body>
+</html>
