@@ -4,7 +4,7 @@ const featuredProjects = [
   {
     name: "Risk Management Dashboard",
     category: "GRC Tool",
-    desc: "A dynamic dashboard for enterprise risk visualization, mitigation tracking, and compliance scoring.",
+    desc: "Dynamic dashboard for enterprise risk visualization, mitigation tracking, and compliance scoring.",
     tech: ["Python", "Plotly", "Flask"],
     img: "assets/images/risk-dashboard.png",
     link: "https://github.com/asi-im-bir/risk-dashboard"
@@ -12,7 +12,7 @@ const featuredProjects = [
   {
     name: "Compliance Automation Engine",
     category: "Automation Script",
-    desc: "Automates ISO 27001 & SOC2 control mapping with AI-based compliance document generation.",
+    desc: "Automates ISO 27001 & SOC2 control mapping with AI-driven compliance document generation.",
     tech: ["Python", "OpenAI", "Pandas"],
     img: "assets/images/compliance-engine.png",
     link: "https://github.com/asi-im-bir/compliance-engine"
@@ -20,19 +20,19 @@ const featuredProjects = [
   {
     name: "Security Audit Portal",
     category: "Web App",
-    desc: "Manages security audit findings, corrective actions, and team workflows in real time.",
+    desc: "Real-time audit management system for tracking findings, corrective actions, and team workflows.",
     tech: ["NextJS", "MongoDB", "TailwindCSS"],
     img: "assets/images/audit-portal.png",
     link: "https://github.com/asi-im-bir/audit-portal"
   }
 ];
 
-// 🧠 Fetch public repos dynamically
+// 🧠 Fetch and render all projects
 async function loadProjects() {
   const container = document.getElementById("project-list");
   container.innerHTML = "";
 
-  // Add featured projects
+  // Featured first
   featuredProjects.forEach(p => {
     const card = document.createElement("div");
     card.classList.add("project-card");
@@ -47,13 +47,12 @@ async function loadProjects() {
     container.appendChild(card);
   });
 
-  // Load repos from GitHub
+  // Public repos
   const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
   const repos = await res.json();
 
   repos.forEach(repo => {
-    const isFeatured = featuredProjects.some(f => f.name.toLowerCase() === repo.name.toLowerCase());
-    if (repo.fork || isFeatured) return;
+    if (repo.fork || featuredProjects.some(f => f.name.toLowerCase() === repo.name.toLowerCase())) return;
 
     const projectData = {
       name: repo.name,
@@ -78,7 +77,7 @@ async function loadProjects() {
   setupModalEvents();
 }
 
-// 🧩 Fetch and render README
+// 🧩 Fetch README from GitHub
 async function fetchReadme(projectName) {
   const urls = [
     `https://raw.githubusercontent.com/${username}/${projectName}/main/README.md`,
@@ -92,7 +91,7 @@ async function fetchReadme(projectName) {
   return "❌ No README found for this project.";
 }
 
-// 🧭 Modal functionality
+// 🧭 Modal logic
 function setupModalEvents() {
   const modal = document.getElementById("project-modal");
   const closeBtn = document.getElementById("modal-close");
@@ -107,13 +106,31 @@ function setupModalEvents() {
       document.getElementById("modal-tech").innerHTML = project.tech.map(t => `<span class="tag">${t}</span>`).join("");
       document.getElementById("modal-link").href = project.link;
 
-      document.getElementById("modal-readme").innerHTML = "🕒 Loading README preview...";
+      const readmeContainer = document.getElementById("modal-readme");
+      readmeContainer.innerHTML = "🕒 Loading README preview...";
+      readmeContainer.classList.remove("collapsed");
 
       const readme = await fetchReadme(project.name);
       const html = marked.parse(readme);
-      document.getElementById("modal-readme").innerHTML = html;
+      readmeContainer.innerHTML = html;
+
+      // Syntax highlighting
       hljs.highlightAll();
 
+      // Collapsible toggle
+      const toggleContainer = document.createElement("div");
+      toggleContainer.id = "readme-toggle-container";
+      const toggleBtn = document.createElement("button");
+      toggleBtn.id = "readme-toggle";
+      toggleBtn.textContent = "▼ Show More";
+      toggleBtn.addEventListener("click", () => {
+        readmeContainer.classList.toggle("collapsed");
+        toggleBtn.textContent = readmeContainer.classList.contains("collapsed") ? "▼ Show More" : "▲ Collapse";
+      });
+      toggleContainer.appendChild(toggleBtn);
+      readmeContainer.after(toggleContainer);
+
+      readmeContainer.classList.add("collapsed");
       modal.style.display = "flex";
     });
   });
@@ -124,16 +141,15 @@ function setupModalEvents() {
   });
 }
 
-// 🔍 Filter
+// 🔍 Filter buttons
 document.querySelectorAll(".filter-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
     const category = btn.dataset.category;
-
     document.querySelectorAll(".project-card").forEach(card => {
-      if (category === "all") card.style.display = "block";
-      else card.style.display = card.innerHTML.includes(category) ? "block" : "none";
+      card.style.display =
+        category === "all" || card.innerHTML.includes(category) ? "block" : "none";
     });
   });
 });

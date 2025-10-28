@@ -26,3 +26,79 @@
   color: #fff;
   margin-top: 1rem;
 }
+/* ===== GitHub-style README styling ===== */
+#modal-readme {
+  background: #0d1117;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  color: #c9d1d9;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+#modal-readme a {
+  color: #58a6ff;
+  text-decoration: none;
+}
+#modal-readme a:hover {
+  text-decoration: underline;
+}
+
+#modal-readme img {
+  max-width: 100%;
+  border-radius: 6px;
+  margin: 10px 0;
+}
+
+#modal-readme pre {
+  background: #161b22;
+  padding: 0.8rem;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+#modal-readme code {
+  background: #21262d;
+  color: #f0f6fc;
+  padding: 3px 6px;
+  border-radius: 5px;
+}
+
+#modal-readme table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+}
+#modal-readme th, #modal-readme td {
+  border: 1px solid #30363d;
+  padding: 6px 10px;
+}
+#modal-readme th {
+  background: #161b22;
+}
+
+/* Collapsible section */
+#modal-readme.collapsed {
+  max-height: 220px;
+  overflow: hidden;
+  position: relative;
+}
+#readme-toggle-container {
+  text-align: center;
+  margin-top: 8px;
+}
+#readme-toggle {
+  background: #21262d;
+  border: 1px solid #58a6ff;
+  color: #58a6ff;
+  padding: 5px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+#readme-toggle:hover {
+  background: #58a6ff;
+  color: #0d1117;
+}
