@@ -1,6 +1,5 @@
 const username = "asi-im-bir";
 
-// === Featured projects with summaries ===
 const featuredProjects = [
   {
     name: "Risk Management Dashboard",
@@ -28,27 +27,27 @@ const featuredProjects = [
   }
 ];
 
-// === Load both featured & public GitHub repos ===
+// 🧠 Load all projects
 async function loadProjects() {
   const container = document.getElementById("project-list");
   container.innerHTML = "";
 
-  // 1️⃣ Featured projects (curated)
+  // Featured projects first
   featuredProjects.forEach(p => {
     const card = document.createElement("div");
     card.classList.add("project-card");
+    card.dataset.project = JSON.stringify(p);
     card.innerHTML = `
       <img src="${p.img}" alt="${p.name}" />
       <h3>${p.name}</h3>
       <p class="desc">${p.desc}</p>
       <div class="tech-tags">${p.tech.map(t => `<span class="tag">${t}</span>`).join("")}</div>
       <p class="category">📂 ${p.category}</p>
-      <a href="${p.link}" target="_blank" class="view-btn">🔗 View on GitHub</a>
     `;
     container.appendChild(card);
   });
 
-  // 2️⃣ Public repos from GitHub
+  // GitHub repos (non-featured)
   const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
   const repos = await response.json();
 
@@ -58,33 +57,63 @@ async function loadProjects() {
 
     const card = document.createElement("div");
     card.classList.add("project-card");
+    const projectData = {
+      name: repo.name,
+      desc: repo.description || "No description provided.",
+      tech: ["GitHub Repo"],
+      img: "assets/images/default.png",
+      link: repo.html_url,
+      category: "Public Repo"
+    };
+    card.dataset.project = JSON.stringify(projectData);
     card.innerHTML = `
       <h3>${repo.name}</h3>
       <p class="desc">${repo.description || "No description provided."}</p>
       <p class="category">📂 Public Repo</p>
-      <a href="${repo.html_url}" target="_blank" class="view-btn">🔗 View on GitHub</a>
     `;
     container.appendChild(card);
   });
+
+  setupModalEvents();
 }
 
-// Initialize
-loadProjects();
+// Modal functionality
+function setupModalEvents() {
+  const modal = document.getElementById("project-modal");
+  const closeBtn = document.getElementById("modal-close");
 
-// 🔍 Filtering logic
+  document.querySelectorAll(".project-card").forEach(card => {
+    card.addEventListener("click", () => {
+      const project = JSON.parse(card.dataset.project);
+      document.getElementById("modal-title").textContent = project.name;
+      document.getElementById("modal-desc").textContent = project.desc;
+      document.getElementById("modal-img").src = project.img;
+      document.getElementById("modal-tech").innerHTML = project.tech
+        .map(t => `<span class="tag">${t}</span>`)
+        .join("");
+      document.getElementById("modal-link").href = project.link;
+      modal.style.display = "flex";
+    });
+  });
+
+  closeBtn.addEventListener("click", () => (modal.style.display = "none"));
+  modal.addEventListener("click", e => {
+    if (e.target === modal) modal.style.display = "none";
+  });
+}
+
+// Filter buttons
 document.querySelectorAll(".filter-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
     const category = btn.dataset.category;
 
-    const allCards = document.querySelectorAll(".project-card");
-    allCards.forEach(card => {
-      if (category === "all") {
-        card.style.display = "block";
-      } else {
-        card.style.display = card.innerHTML.includes(category) ? "block" : "none";
-      }
+    document.querySelectorAll(".project-card").forEach(card => {
+      if (category === "all") card.style.display = "block";
+      else card.style.display = card.innerHTML.includes(category) ? "block" : "none";
     });
   });
 });
+
+loadProjects();
