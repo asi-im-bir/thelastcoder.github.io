@@ -1,56 +1,124 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Asi-im-bir | Portfolio</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <header>
-    <h1>🧠 Asi-im-bir</h1>
-    <nav>
-      <a href="#projects">Projects</a>
-      <a href="https://github.com/asi-im-bir" target="_blank">GitHub</a>
-    </nav>
-  </header>
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
 
-  <main>
-    <section id="projects" class="section projects">
-      <h2>🚀 My Projects</h2>
+:root {
+  --bg-dark: #0d0d0d;
+  --card-bg: #1a1a1a;
+  --accent: #facc15;
+  --text-light: #f5f5f5;
+  --muted: #999;
+}
 
-      <!-- Filter Buttons -->
-      <div class="filter-bar">
-        <button class="filter-btn active" data-category="all">All</button>
-        <button class="filter-btn" data-category="Web App">Web Apps</button>
-        <button class="filter-btn" data-category="Automation Script">Automation</button>
-        <button class="filter-btn" data-category="GRC Tool">GRC Tools</button>
-        <button class="filter-btn" data-category="Web Portal">Web Portals</button>
-      </div>
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+}
 
-      <!-- Projects Grid -->
-      <div id="project-list" class="projects-grid"></div>
-    </section>
-  </main>
+header {
+  text-align: center;
+  padding: 2rem 1rem;
+}
 
-  <!-- Modal -->
-  <div id="modal" class="modal">
-    <div class="modal-content">
-      <span id="close-modal" class="close">&times;</span>
-      <img id="modal-img" alt="Project preview" />
-      <h3 id="modal-title"></h3>
-      <p id="modal-desc"></p>
-      <div id="modal-tech" class="tech-stack"></div>
-      <div class="modal-footer">
-        <a id="modal-link" href="#" target="_blank">🌐 View on GitHub</a>
-      </div>
-    </div>
-  </div>
+h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
 
-  <footer>
-    <p>© 2025 Asi-im-bir | Built with ❤️ using HTML, CSS, and JS</p>
-  </footer>
+.filter-bar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 
-  <script src="script.js"></script>
-</body>
-</html>
+.filter-btn {
+  background: #222;
+  color: var(--text-light);
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+  background: var(--accent);
+  color: #000;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.project-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+}
+
+.project-card img {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.project-card h3 {
+  margin: 0.5rem 0;
+  font-size: 1.25rem;
+}
+
+.project-card .desc {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.tech-tags {
+  margin-top: 1rem;
+}
+
+.tech-tags .tag {
+  display: inline-block;
+  background: #2c2c2c;
+  color: var(--accent);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  margin: 3px;
+}
+
+.view-btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #000;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-top: 1rem;
+  transition: background 0.3s;
+}
+
+.view-btn:hover {
+  background: #ffe26f;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}

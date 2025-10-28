@@ -1,4 +1,3 @@
-// === Project Data ===
 const projects = [
   {
     name: "Risk Management Dashboard",
@@ -20,7 +19,7 @@ const projects = [
   },
   {
     name: "Security Audit Portal",
-    type: "Web Portal",
+    type: "Web App",
     date: "February 2025",
     desc: "Web-based portal for tracking audit findings, corrective actions, and policies.",
     tech: ["NextJS", "Tailwind", "MongoDB"],
@@ -38,12 +37,8 @@ const projects = [
   }
 ];
 
-// === Render Projects ===
 const container = document.getElementById("project-list");
-const modal = document.getElementById("modal");
-const closeModal = document.getElementById("close-modal");
 
-// Populate projects
 function renderProjects(filterType = "all") {
   container.innerHTML = "";
   const filtered = filterType === "all" ? projects : projects.filter(p => p.type === filterType);
@@ -52,55 +47,26 @@ function renderProjects(filterType = "all") {
     const card = document.createElement("div");
     card.classList.add("project-card");
     card.innerHTML = `
-      <img src="${p.img}" alt="${p.name}" class="project-image">
-      <div class="project-content">
-        <div class="project-header">
-          <h3>${p.name}</h3>
-          <span class="project-date">${p.date}</span>
-        </div>
-        <p class="project-type">${p.type}</p>
-        <p class="project-desc">${p.desc}</p>
-        <div class="tech-stack">
-          ${p.tech.map(t => `<span class="tech-tag">${t}</span>`).join("")}
-        </div>
-      </div>
+      <img src="${p.img}" alt="${p.name}">
+      <h3>${p.name}</h3>
+      <p class="date">${p.date}</p>
+      <p class="type"><strong>${p.type}</strong></p>
+      <p class="desc">${p.desc}</p>
+      <div class="tech-tags">${p.tech.map(t => `<span class="tag">${t}</span>`).join("")}</div>
+      <a href="${p.link}" target="_blank" class="view-btn">🔗 View Project</a>
     `;
-    card.addEventListener("click", () => openModal(p));
     container.appendChild(card);
   });
 }
 
-// === Modal Functions ===
-function openModal(project) {
-  document.getElementById("modal-img").src = project.img;
-  document.getElementById("modal-title").textContent = project.name;
-  document.getElementById("modal-desc").textContent = project.desc;
-  document.getElementById("modal-tech").innerHTML = project.tech
-    .map(t => `<span class="tech-tag">${t}</span>`)
-    .join("");
-  document.getElementById("modal-link").href = project.link;
-  modal.style.display = "flex";
-}
-
-closeModal.addEventListener("click", () => {
-  modal.style.display = "none";
-});
-
-window.addEventListener("click", (e) => {
-  if (e.target === modal) modal.style.display = "none";
-});
-
-// === Filter Buttons ===
-const buttons = document.querySelectorAll(".filter-btn");
-buttons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    buttons.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    const category = btn.dataset.category;
-    renderProjects(category);
-  });
-});
-
-// Initial Render
+// Initialize
 renderProjects();
 
+// Filtering
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    renderProjects(btn.dataset.category);
+  });
+});

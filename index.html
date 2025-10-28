@@ -1,85 +1,31 @@
-// === Project Data ===
-const projects = [
-  {
-    name: "Risk Management Dashboard",
-    type: "Web App",
-    date: "March 2025",
-    desc: "A dashboard to visualize enterprise risks, mitigation plans, and compliance KPIs.",
-    tech: ["Python", "Plotly", "Flask"],
-    img: "assets/images/risk-dashboard.png",
-    link: "https://github.com/asi-im-bir/risk-dashboard"
-  },
-  {
-    name: "Compliance Automation Engine",
-    type: "Automation Script",
-    date: "July 2024",
-    desc: "Automates ISO 27001 control mapping and generates compliance evidence reports.",
-    tech: ["Python", "Pandas", "OpenAI API"],
-    img: "assets/images/compliance-audit.png",
-    link: "https://github.com/asi-im-bir/compliance-engine"
-  },
-  {
-    name: "Security Audit Portal",
-    type: "Web Portal",
-    date: "February 2025",
-    desc: "Web-based portal for tracking audit findings, corrective actions, and policies.",
-    tech: ["NextJS", "Tailwind", "MongoDB"],
-    img: "assets/images/grc-automation.png",
-    link: "https://github.com/asi-im-bir/audit-portal"
-  },
-  {
-    name: "Incident Tracker",
-    type: "GRC Tool",
-    date: "November 2024",
-    desc: "Tracks and manages security incidents, compliance evidence, and remediation workflows.",
-    tech: ["React", "Express", "NodeJS"],
-    img: "assets/images/incident-tracker.png",
-    link: "https://github.com/asi-im-bir/incident-tracker"
-  }
-];
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Last Coder | Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
 
-// === Render Projects ===
-const container = document.getElementById("project-list");
+<body>
+  <header>
+    <h1>🚀 My Projects</h1>
+    <div class="filter-bar">
+      <button class="filter-btn active" data-category="all">All</button>
+      <button class="filter-btn" data-category="Web App">Web Apps</button>
+      <button class="filter-btn" data-category="Automation Script">Automation</button>
+      <button class="filter-btn" data-category="GRC Tool">GRC Tools</button>
+    </div>
+  </header>
 
-function renderProjects(filterType = "all") {
-  container.innerHTML = "";
-  const filtered = filterType === "all" ? projects : projects.filter(p => p.type === filterType);
+  <main>
+    <div id="project-list" class="projects-grid"></div>
+  </main>
 
-  filtered.forEach(p => {
-    const card = document.createElement("div");
-    card.classList.add("project-card");
-    card.innerHTML = `
-      <img src="${p.img}" alt="${p.name}" class="project-image">
-      <div class="project-content">
-        <div class="project-header">
-          <h3>${p.name}</h3>
-          <span class="project-date">${p.date}</span>
-        </div>
-        <p class="project-type">${p.type}</p>
-        <p class="project-desc">${p.desc}</p>
-        <div class="tech-stack">
-          ${p.tech.map(t => `<span class="tech-tag">${t}</span>`).join("")}
-        </div>
-      </div>
-      <div class="project-footer">
-        <a href="${p.link}" target="_blank">🌐 View Project</a>
-      </div>
-    `;
-    container.appendChild(card);
-  });
-}
+  <footer>
+    <p>© 2025 TheLastCoder — Built with ❤️ and JavaScript</p>
+  </footer>
 
-// Initial render
-renderProjects();
-
-// === Filter Button Logic ===
-const buttons = document.querySelectorAll(".filter-btn");
-
-buttons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    buttons.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    const category = btn.dataset.category;
-    renderProjects(category);
-  });
-});
+  <script src="script.js"></script>
+</body>
+</html>
