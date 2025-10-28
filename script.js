@@ -1,155 +1,106 @@
-const username = "asi-im-bir";
-
-// Local data fallback
-const projectData = {
-  "portfolio-site": {
-    summary: "Personal portfolio that fetches projects dynamically from GitHub.",
-    category: "Frontend",
-    live: "https://thelastcoder.github.io",
-    tech: ["HTML", "CSS", "JavaScript"],
-    images: ["images/portfolio-site-1.png"]
-  }
-};
-
-// Configure Markdown + syntax highlighting
-marked.setOptions({
-  highlight: function(code, lang) {
-    const validLang = hljs.getLanguage(lang) ? lang : 'plaintext';
-    return hljs.highlight(code, { language: validLang }).value;
+// === Project Data ===
+const projects = [
+  {
+    name: "Risk Management Dashboard",
+    type: "Web App",
+    date: "March 2025",
+    desc: "A dashboard to visualize enterprise risks, mitigation plans, and compliance KPIs.",
+    tech: ["Python", "Plotly", "Flask"],
+    img: "assets/images/risk-dashboard.png",
+    link: "https://github.com/asi-im-bir/risk-dashboard"
   },
-  langPrefix: 'hljs language-',
-});
+  {
+    name: "Compliance Automation Engine",
+    type: "Automation Script",
+    date: "July 2024",
+    desc: "Automates ISO 27001 control mapping and generates compliance evidence reports.",
+    tech: ["Python", "Pandas", "OpenAI API"],
+    img: "assets/images/compliance-audit.png",
+    link: "https://github.com/asi-im-bir/compliance-engine"
+  },
+  {
+    name: "Security Audit Portal",
+    type: "Web Portal",
+    date: "February 2025",
+    desc: "Web-based portal for tracking audit findings, corrective actions, and policies.",
+    tech: ["NextJS", "Tailwind", "MongoDB"],
+    img: "assets/images/grc-automation.png",
+    link: "https://github.com/asi-im-bir/audit-portal"
+  },
+  {
+    name: "Incident Tracker",
+    type: "GRC Tool",
+    date: "November 2024",
+    desc: "Tracks and manages security incidents, compliance evidence, and remediation workflows.",
+    tech: ["React", "Express", "NodeJS"],
+    img: "assets/images/incident-tracker.png",
+    link: "https://github.com/asi-im-bir/incident-tracker"
+  }
+];
 
-let allRepos = [];
-async function loadProjects() {
-  const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
-  allRepos = await res.json();
-  renderProjects("All");
-}
+// === Render Projects ===
+const container = document.getElementById("project-list");
+const modal = document.getElementById("modal");
+const closeModal = document.getElementById("close-modal");
 
-function renderProjects(filter) {
-  const container = document.getElementById("projects");
+// Populate projects
+function renderProjects(filterType = "all") {
   container.innerHTML = "";
+  const filtered = filterType === "all" ? projects : projects.filter(p => p.type === filterType);
 
-  const filtered = allRepos.filter(r => {
-    if (r.fork || r.private) return false;
-    const data = projectData[r.name];
-    if (filter === "All") return true;
-    return (
-      (r.language && r.language.toLowerCase() === filter.toLowerCase()) ||
-      (data && data.category && data.category.toLowerCase() === filter.toLowerCase())
-    );
-  });
-
-  filtered.forEach(repo => {
-    const data = projectData[repo.name] || {};
-    const img = (data.images && data.images[0]) || `images/${repo.name}.png`;
-    const summary = data.summary || repo.description || "Open-source project";
-    const category = data.category || repo.language || "General";
-
+  filtered.forEach(p => {
     const card = document.createElement("div");
-    card.className = "project-card";
+    card.classList.add("project-card");
     card.innerHTML = `
-      <img src="${img}" alt="${repo.name}" class="project-img" onerror="this.style.display='none'">
+      <img src="${p.img}" alt="${p.name}" class="project-image">
       <div class="project-content">
-        <h3>${repo.name}</h3>
-        <p class="project-summary">${summary}</p>
-        <div class="buttons">
-          <button class="btn view-btn"
-            data-name="${repo.name}"
-            data-image="${img}"
-            data-live="${data.live || ''}"
-            data-github="${repo.html_url}">
-            👁 View Project
-          </button>
+        <div class="project-header">
+          <h3>${p.name}</h3>
+          <span class="project-date">${p.date}</span>
         </div>
-        <div class="badge">${category}</div>
-      </div>`;
+        <p class="project-type">${p.type}</p>
+        <p class="project-desc">${p.desc}</p>
+        <div class="tech-stack">
+          ${p.tech.map(t => `<span class="tech-tag">${t}</span>`).join("")}
+        </div>
+      </div>
+    `;
+    card.addEventListener("click", () => openModal(p));
     container.appendChild(card);
   });
-
-  if (window.AOS) AOS.refresh();
 }
 
-// Filter buttons
-document.addEventListener("click", e => {
-  if (e.target.classList.contains("filter-btn")) {
-    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-    e.target.classList.add("active");
-    renderProjects(e.target.dataset.language);
-  }
-});
-
-// Dark mode toggle
-const toggle = document.getElementById("darkModeToggle");
-if (localStorage.getItem("theme") === "dark") document.body.classList.add("dark");
-toggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark");
-  localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
-});
-
-// Fetch README
-async function fetchReadme(repoName) {
-  const urls = [
-    `https://raw.githubusercontent.com/${username}/${repoName}/main/README.md`,
-    `https://raw.githubusercontent.com/${username}/${repoName}/master/README.md`
-  ];
-  for (const url of urls) {
-    const res = await fetch(url);
-    if (res.ok) return await res.text();
-  }
-  return "No README found.";
+// === Modal Functions ===
+function openModal(project) {
+  document.getElementById("modal-img").src = project.img;
+  document.getElementById("modal-title").textContent = project.name;
+  document.getElementById("modal-desc").textContent = project.desc;
+  document.getElementById("modal-tech").innerHTML = project.tech
+    .map(t => `<span class="tech-tag">${t}</span>`)
+    .join("");
+  document.getElementById("modal-link").href = project.link;
+  modal.style.display = "flex";
 }
 
-// Modal logic
-const modal = document.getElementById("projectModal");
-const modalImg = document.getElementById("modalImage");
-const modalTitle = document.getElementById("modalTitle");
-const modalTech = document.getElementById("modalTech");
-const modalLinks = document.getElementById("modalLinks");
-const closeBtn = document.querySelector(".close-btn");
-const prevBtn = document.getElementById("prevImg");
-const nextBtn = document.getElementById("nextImg");
-const readmeContent = document.getElementById("readmeContent");
-let currentImages = [], currentIndex = 0;
-
-document.addEventListener("click", e => {
-  if (e.target.classList.contains("view-btn")) {
-    const { name, image, live, github } = e.target.dataset;
-    const project = projectData[name] || {};
-
-    modal.style.display = "flex";
-    modalTitle.textContent = name;
-    modalTech.innerHTML = project.tech ? project.tech.map(t => `<li>${t}</li>`).join("") : "";
-    readmeContent.textContent = "Loading README...";
-
-    currentImages = project.images || [image];
-    currentIndex = 0;
-    modalImg.src = currentImages[currentIndex];
-
-    modalLinks.innerHTML = `
-      ${project.live ? `<a href="${project.live}" target="_blank" class="btn">🌐 Live Demo</a>` : ""}
-      <a href="${github}" target="_blank" class="btn-outline">💻 GitHub</a>
-      <a href="project.html?repo=${name}" class="btn" target="_blank">📖 Full Case Study</a>
-    `;
-
-    fetchReadme(name).then(md => {
-      readmeContent.innerHTML = marked.parse(md);
-    });
-  }
+closeModal.addEventListener("click", () => {
+  modal.style.display = "none";
 });
 
-nextBtn.addEventListener("click", () => {
-  currentIndex = (currentIndex + 1) % currentImages.length;
-  modalImg.src = currentImages[currentIndex];
-});
-prevBtn.addEventListener("click", () => {
-  currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
-  modalImg.src = currentImages[currentIndex];
+window.addEventListener("click", (e) => {
+  if (e.target === modal) modal.style.display = "none";
 });
 
-closeBtn.addEventListener("click", () => modal.style.display = "none");
-window.addEventListener("click", e => { if (e.target === modal) modal.style.display = "none"; });
-document.addEventListener("keydown", e => { if (e.key === "Escape") modal.style.display = "none"; });
+// === Filter Buttons ===
+const buttons = document.querySelectorAll(".filter-btn");
+buttons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    buttons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    const category = btn.dataset.category;
+    renderProjects(category);
+  });
+});
 
-loadProjects();
+// Initial Render
+renderProjects();
+

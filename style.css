@@ -1,130 +1,56 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fira+Code:wght@400;500&display=swap');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asi-im-bir | Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🧠 Asi-im-bir</h1>
+    <nav>
+      <a href="#projects">Projects</a>
+      <a href="https://github.com/asi-im-bir" target="_blank">GitHub</a>
+    </nav>
+  </header>
 
-* { box-sizing: border-box; transition: all 0.3s ease; }
-html { scroll-behavior: smooth; }
+  <main>
+    <section id="projects" class="section projects">
+      <h2>🚀 My Projects</h2>
 
-:root {
-  --bg: #f8f9fc;
-  --card: #ffffff;
-  --text: #222;
-  --accent: #0078ff;
-}
-body.dark {
-  --bg: #121212;
-  --card: #1e1e1e;
-  --text: #f8f9fc;
-  --accent: #ffcc00;
-}
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-}
+      <!-- Filter Buttons -->
+      <div class="filter-bar">
+        <button class="filter-btn active" data-category="all">All</button>
+        <button class="filter-btn" data-category="Web App">Web Apps</button>
+        <button class="filter-btn" data-category="Automation Script">Automation</button>
+        <button class="filter-btn" data-category="GRC Tool">GRC Tools</button>
+        <button class="filter-btn" data-category="Web Portal">Web Portals</button>
+      </div>
 
-/* --- HERO --- */
-.hero {
-  background: linear-gradient(135deg, var(--accent), #00b7ff);
-  color: white;
-  padding: 4rem 1rem;
-  text-align: center;
-}
-.hero-links a {
-  color: white;
-  text-decoration: none;
-  margin: 0 10px;
-  font-weight: 600;
-  padding: 8px 16px;
-  border: 2px solid white;
-  border-radius: 8px;
-}
-.hero-links a:hover { background: white; color: var(--accent); }
-.toggle-btn { margin-top: 1rem; background: transparent; border: 2px solid white; color: white; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; }
-.toggle-btn:hover { background: white; color: var(--accent); }
+      <!-- Projects Grid -->
+      <div id="project-list" class="projects-grid"></div>
+    </section>
+  </main>
 
-/* --- PROJECTS --- */
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2rem;
-}
-.project-card {
-  background: var(--card);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-}
-.project-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-}
-.project-img { width: 100%; height: 200px; object-fit: cover; }
-.project-content { padding: 1rem; }
-.project-summary { font-size: 0.95rem; opacity: 0.9; margin-bottom: 0.6rem; }
-.badge {
-  display: inline-block;
-  background: var(--accent);
-  color: white;
-  font-size: 0.8rem;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-weight: 600;
-}
-.btn, .btn-outline {
-  display: inline-block;
-  text-decoration: none;
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-weight: 600;
-  margin-top: 0.8rem;
-}
-.btn { background: var(--accent); color: white; }
-.btn-outline { border: 2px solid var(--accent); color: var(--accent); }
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span id="close-modal" class="close">&times;</span>
+      <img id="modal-img" alt="Project preview" />
+      <h3 id="modal-title"></h3>
+      <p id="modal-desc"></p>
+      <div id="modal-tech" class="tech-stack"></div>
+      <div class="modal-footer">
+        <a id="modal-link" href="#" target="_blank">🌐 View on GitHub</a>
+      </div>
+    </div>
+  </div>
 
-/* --- MODAL --- */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  background-color: rgba(0,0,0,0.6);
-  backdrop-filter: blur(5px);
-  justify-content: center;
-  align-items: center;
-}
-.modal-content.large {
-  background: var(--card);
-  color: var(--text);
-  border-radius: 12px;
-  padding: 2rem;
-  width: 95%;
-  max-width: 900px;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-.carousel {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-.nav-btn {
-  position: absolute; top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.4);
-  color: white; border: none;
-  font-size: 1.8rem; padding: 0.4rem 0.8rem;
-  border-radius: 8px; cursor: pointer;
-}
-.readme-content pre {
-  background: #1e1e1e;
-  color: #f5f5f5;
-  border-radius: 8px;
-  padding: 12px;
-  overflow-x: auto;
-  font-family: 'Fira Code', monospace;
-}
-.readme-content h1, .readme-content h2 { color: var(--accent); }
-.readme-content a { color: var(--accent); }
+  <footer>
+    <p>© 2025 Asi-im-bir | Built with ❤️ using HTML, CSS, and JS</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
