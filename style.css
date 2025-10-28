@@ -102,3 +102,449 @@
   background: #58a6ff;
   color: #0d1117;
 }
+/* ================================
+   🌙 GITHUB-STYLE README SECTION
+   ================================ */
+
+#modal-readme {
+  background: #0d1117; /* Dark GitHub background */
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  color: #c9d1d9;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  overflow-y: auto;
+  max-height: 420px;
+  box-shadow: inset 0 0 0 1px #30363d;
+  transition: max-height 0.3s ease-in-out;
+}
+
+/* Links inside README */
+#modal-readme a {
+  color: #58a6ff;
+  text-decoration: none;
+}
+#modal-readme a:hover {
+  text-decoration: underline;
+}
+
+/* Images inside README */
+#modal-readme img {
+  max-width: 100%;
+  display: block;
+  margin: 10px auto;
+  border-radius: 8px;
+  background: #161b22;
+  padding: 5px;
+}
+
+/* Code blocks */
+#modal-readme pre {
+  background: #161b22;
+  padding: 0.9rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  border: 1px solid #30363d;
+}
+#modal-readme code {
+  background: #21262d;
+  color: #f0f6fc;
+  padding: 2px 6px;
+  border-radius: 5px;
+  font-family: "Fira Code", monospace;
+}
+
+/* Tables */
+#modal-readme table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+}
+#modal-readme th, #modal-readme td {
+  border: 1px solid #30363d;
+  padding: 6px 10px;
+}
+#modal-readme th {
+  background: #161b22;
+}
+
+/* Lists */
+#modal-readme ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+#modal-readme ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+}
+
+/* Headings */
+#modal-readme h1, 
+#modal-readme h2, 
+#modal-readme h3, 
+#modal-readme h4 {
+  color: #f0f6fc;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+/* Blockquotes */
+#modal-readme blockquote {
+  border-left: 3px solid #58a6ff;
+  padding-left: 1rem;
+  margin: 0.8rem 0;
+  color: #8b949e;
+  font-style: italic;
+}
+
+/* Horizontal rules */
+#modal-readme hr {
+  border: 0;
+  border-top: 1px solid #30363d;
+  margin: 1.5rem 0;
+}
+
+/* ================================
+   📂 COLLAPSIBLE SECTION
+   ================================ */
+
+#modal-readme.collapsed {
+  max-height: 220px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Gradient overlay for collapsed view */
+#modal-readme.collapsed::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 50px;
+  width: 100%;
+  background: linear-gradient(transparent, #0d1117);
+}
+
+/* Toggle button container */
+#readme-toggle-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Toggle button */
+#readme-toggle {
+  background: #21262d;
+  border: 1px solid #58a6ff;
+  color: #58a6ff;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#readme-toggle:hover {
+  background: #58a6ff;
+  color: #0d1117;
+}
+
+/* ================================
+   ✨ MODAL GENERAL STYLES
+   ================================ */
+
+#project-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+#modal-content {
+  background: #161b22;
+  color: #c9d1d9;
+  width: 80%;
+  max-width: 900px;
+  border-radius: 12px;
+  padding: 2rem;
+  overflow-y: auto;
+  max-height: 85vh;
+  position: relative;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+}
+
+/* Close button */
+#modal-close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  font-size: 1.6rem;
+  cursor: pointer;
+  color: #8b949e;
+  transition: color 0.2s ease;
+}
+#modal-close:hover {
+  color: #f0f6fc;
+}
+
+/* Modal image */
+#modal-img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+/* Tags */
+#modal-tech .tag {
+  background: #21262d;
+  color: #58a6ff;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  margin: 3px;
+  display: inline-block;
+}
+
+/* Link button */
+#modal-link {
+  display: inline-block;
+  background: #58a6ff;
+  color: #0d1117;
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+#modal-link:hover {
+  background: #1f6feb;
+  transform: translateY(-2px);
+}
+/* ================================
+   🌙 GITHUB-STYLE README SECTION
+   ================================ */
+
+#modal-readme {
+  background: #0d1117; /* Dark GitHub background */
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  color: #c9d1d9;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  overflow-y: auto;
+  max-height: 420px;
+  box-shadow: inset 0 0 0 1px #30363d;
+  transition: max-height 0.3s ease-in-out;
+}
+
+/* Links inside README */
+#modal-readme a {
+  color: #58a6ff;
+  text-decoration: none;
+}
+#modal-readme a:hover {
+  text-decoration: underline;
+}
+
+/* Images inside README */
+#modal-readme img {
+  max-width: 100%;
+  display: block;
+  margin: 10px auto;
+  border-radius: 8px;
+  background: #161b22;
+  padding: 5px;
+}
+
+/* Code blocks */
+#modal-readme pre {
+  background: #161b22;
+  padding: 0.9rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  border: 1px solid #30363d;
+}
+#modal-readme code {
+  background: #21262d;
+  color: #f0f6fc;
+  padding: 2px 6px;
+  border-radius: 5px;
+  font-family: "Fira Code", monospace;
+}
+
+/* Tables */
+#modal-readme table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+}
+#modal-readme th, #modal-readme td {
+  border: 1px solid #30363d;
+  padding: 6px 10px;
+}
+#modal-readme th {
+  background: #161b22;
+}
+
+/* Lists */
+#modal-readme ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+#modal-readme ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+}
+
+/* Headings */
+#modal-readme h1, 
+#modal-readme h2, 
+#modal-readme h3, 
+#modal-readme h4 {
+  color: #f0f6fc;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+/* Blockquotes */
+#modal-readme blockquote {
+  border-left: 3px solid #58a6ff;
+  padding-left: 1rem;
+  margin: 0.8rem 0;
+  color: #8b949e;
+  font-style: italic;
+}
+
+/* Horizontal rules */
+#modal-readme hr {
+  border: 0;
+  border-top: 1px solid #30363d;
+  margin: 1.5rem 0;
+}
+
+/* ================================
+   📂 COLLAPSIBLE SECTION
+   ================================ */
+
+#modal-readme.collapsed {
+  max-height: 220px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Gradient overlay for collapsed view */
+#modal-readme.collapsed::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 50px;
+  width: 100%;
+  background: linear-gradient(transparent, #0d1117);
+}
+
+/* Toggle button container */
+#readme-toggle-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Toggle button */
+#readme-toggle {
+  background: #21262d;
+  border: 1px solid #58a6ff;
+  color: #58a6ff;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#readme-toggle:hover {
+  background: #58a6ff;
+  color: #0d1117;
+}
+
+/* ================================
+   ✨ MODAL GENERAL STYLES
+   ================================ */
+
+#project-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+#modal-content {
+  background: #161b22;
+  color: #c9d1d9;
+  width: 80%;
+  max-width: 900px;
+  border-radius: 12px;
+  padding: 2rem;
+  overflow-y: auto;
+  max-height: 85vh;
+  position: relative;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+}
+
+/* Close button */
+#modal-close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  font-size: 1.6rem;
+  cursor: pointer;
+  color: #8b949e;
+  transition: color 0.2s ease;
+}
+#modal-close:hover {
+  color: #f0f6fc;
+}
+
+/* Modal image */
+#modal-img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+/* Tags */
+#modal-tech .tag {
+  background: #21262d;
+  color: #58a6ff;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  margin: 3px;
+  display: inline-block;
+}
+
+/* Link button */
+#modal-link {
+  display: inline-block;
+  background: #58a6ff;
+  color: #0d1117;
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+#modal-link:hover {
+  background: #1f6feb;
+  transform: translateY(-2px);
+}
